@@ -1,8 +1,11 @@
 package com.chenliao.chenliaoblog.service;
 
 import com.chenliao.chenliaoblog.entity.User;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
+
+
 
 public interface UserService {
     /**
