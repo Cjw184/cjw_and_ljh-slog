@@ -1,5 +1,6 @@
 package com.chenliao.chenliaoblog.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -11,8 +12,8 @@ public class User {
     /**
      * 主键id
      */
+    //private Integer id;
     private Integer id;
-
     /**
      * 用户名
      */
@@ -21,7 +22,7 @@ public class User {
     /**
      * 密码
      */
-    private String passWord;
+    private  String passWord;
 
     /**
      * 邮箱
@@ -31,12 +32,13 @@ public class User {
     /**
      * 上次登录时间
      */
+    @JsonFormat(pattern = "yyyyMMdd", timezone = "GMT+8")
     private Date lastLoginTime;
 
     /**
      * 手机号
      */
-    private Integer phone;
+    private String phone;
 
     /**
      * 昵称

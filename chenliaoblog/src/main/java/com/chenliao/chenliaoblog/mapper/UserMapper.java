@@ -19,13 +19,13 @@ public interface UserMapper {
      * 添加用户
      * @param user
      */
-    void insert(@Param("user") User user);
+    void insert(User user);
 
     /**
      * 更新用户
      * @param user
      */
-    void update(@Param("user")User user);
+    void update(User user);
 
     /**
      * 删除用户

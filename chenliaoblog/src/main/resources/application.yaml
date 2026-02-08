@@ -1,11 +1,13 @@
 server:
   port: 8081
+  servlet:
+    context-path: /myblog
 spring:
   application:
     name: myblog
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/myblog?useSSL=false&serverTimezone=UTC
+    url: jdbc:mysql://127.0.0.1:3306/myblog?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
     username: root
     password: Cjw18476714119
   redis:
@@ -19,10 +21,17 @@ spring:
         time-between-eviction-runs: 10s
   jackson:
     default-property-inclusion: non_null # JSON处理时忽略非空字段
+    property-naming-strategy: SNAKE_CASE # 支持下划线命名转驼峰
 mybatis-plus:
   type-aliases-package: chenliao.entity # 别名扫描包
 logging:
   level:
-    chenliao: debug
+    com.chenliao.chenliaoblog:
+      mapper: DEBUG
+      service: INFO
+      controller: INFO
   pattern:
     dateformat: mm:ss.SSS
+mybatis:
+  #config-location: classpath:mybatis/mybatis-config.xml
+  mapper-locations: classpath:mapper/*.xml

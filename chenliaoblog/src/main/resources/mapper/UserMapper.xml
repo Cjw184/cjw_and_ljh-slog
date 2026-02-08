@@ -20,19 +20,32 @@
     </select>
 
     <insert id="insert" parameterType="com.chenliao.chenliaoblog.entity.User" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO person_user (username, password, email, last_login_time, phone, nickname, create_time, update_time)
-        VALUES(#{userName}, #{passWord}, #{email}, #{lastLoginTime}, #{phone}, #{nickname}, #{createTime}, #{updateTime})
+        INSERT INTO person_user (username, password, email, last_login_time, phone, nickname)
+        VALUES(#{userName}, #{passWord}, #{email}, #{lastLoginTime}, #{phone}, #{nickname})
     </insert>
 
     <update id="update" parameterType="com.chenliao.chenliaoblog.entity.User">
         update person_user
+        <!--updatetime和createtime暂未处理-->
         <set>
-            username = #{userName},
-            password = #{passWord},
-            email = #{email},
-            last_login_time = #{lastLoginTime},
-            phone = #{phone},
-            nickname = #{nickname}
+            <if test="userName != null">
+                username = #{userName},
+            </if>
+            <if test="passWord != null">
+                password = #{passWord},
+            </if>
+            <if test="email != null">
+                email = #{email},
+            </if>
+            <if test="lastLoginTime != null">
+                last_login_time = #{lastLoginTime},
+            </if>
+            <if test="phone != null">
+                phone = #{phone},
+            </if>
+            <if test="nickname != null">
+                nickname = #{nickname}
+            </if>
         </set>
         WHERE id = #{id}
     </update>
