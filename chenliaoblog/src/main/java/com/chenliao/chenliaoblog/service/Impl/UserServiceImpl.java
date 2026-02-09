@@ -28,6 +28,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void updateUser(User user) {
+        user.setPassWord(DigestUtils.md5DigestAsHex(user.getPassWord().getBytes()));
         userMapper.update(user);
     }
 

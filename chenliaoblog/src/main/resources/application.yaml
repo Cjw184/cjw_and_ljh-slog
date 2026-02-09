@@ -24,6 +24,11 @@ spring:
     property-naming-strategy: SNAKE_CASE # 支持下划线命名转驼峰
 mybatis-plus:
   type-aliases-package: chenliao.entity # 别名扫描包
+pagehelper:
+  helperDialect: mysql
+  reasonable: true
+  supportMethodsArguments: true
+  params: count=countSql
 logging:
   level:
     com.chenliao.chenliaoblog:
