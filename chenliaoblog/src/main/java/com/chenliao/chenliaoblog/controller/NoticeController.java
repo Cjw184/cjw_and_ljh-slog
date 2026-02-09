@@ -7,6 +7,7 @@ import com.chenliao.chenliaoblog.service.NoticeService;
 import com.chenliao.chenliaoblog.utils.JsonResult;
 import com.chenliao.chenliaoblog.utils.PageUtil;
 import com.github.pagehelper.PageInfo;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,9 +18,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
 
+@Api(tags="公告管理")
 @Controller
 @RequestMapping("/notice")
-
 public class NoticeController {
     @Autowired
     NoticeService noticeService;
@@ -30,7 +31,7 @@ public class NoticeController {
      * @return
      */
     @ApiOperation(value = "公告列表")
-    @PostMapping("list")
+    @PostMapping("/list")
     public JsonResult<Object> listPage(@RequestBody  PageRequest pageRequest) {
         List<Notice> noticeList = noticeService.getNoticePage(pageRequest);
         PageInfo pageInfo = new PageInfo(noticeList);
