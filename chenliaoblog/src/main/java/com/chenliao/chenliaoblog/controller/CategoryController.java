@@ -8,19 +8,16 @@ import com.chenliao.chenliaoblog.service.CategoryService;
 import com.chenliao.chenliaoblog.utils.JsonResult;
 import com.chenliao.chenliaoblog.utils.PageUtil;
 import com.github.pagehelper.PageInfo;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Api(tags = "分类管理")
-@Controller
+@Tag(name = "分类管理")
+@RestController
 @RequestMapping("/category")
 public class CategoryController {
     @Autowired
@@ -43,7 +40,7 @@ public class CategoryController {
      * 添加分类
      * @return
      */
-    @ApiOperation(value = "添加分类")
+    @Operation(summary = "添加分类")
     @PostMapping("/create")
     public JsonResult<Object> categoryCreate(@RequestBody  Category category) {
         int isStatus = categoryService.saveCategory(category);
@@ -57,7 +54,7 @@ public class CategoryController {
      * 修改分类
      * @return
      */
-    @ApiOperation(value = "修改分类")
+    @Operation(summary = "修改分类")
     @PostMapping("/update")
     public JsonResult<Object> categoryUpdate(@RequestBody  Category category) {
         int isStatus = categoryService.updateCategory(category);
@@ -71,7 +68,7 @@ public class CategoryController {
      * 删除
      * @return
      */
-    @ApiOperation(value = "删除分类")
+    @Operation(summary = "删除分类")
     @PostMapping("/delete/{id}")
     public JsonResult<Object> categoryDelete(@PathVariable(value = "id") int id) {
         categoryService.deleteCategory(id);

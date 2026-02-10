@@ -7,19 +7,16 @@ import com.chenliao.chenliaoblog.service.NoticeService;
 import com.chenliao.chenliaoblog.utils.JsonResult;
 import com.chenliao.chenliaoblog.utils.PageUtil;
 import com.github.pagehelper.PageInfo;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Api(tags="公告管理")
-@Controller
+@Tag(name = "公告管理")
+@RestController
 @RequestMapping("/notice")
 public class NoticeController {
     @Autowired
@@ -30,7 +27,7 @@ public class NoticeController {
      * @param pageRequest
      * @return
      */
-    @ApiOperation(value = "公告列表")
+    @Operation(summary = "公告列表")
     @PostMapping("/list")
     public JsonResult<Object> listPage(@RequestBody  PageRequest pageRequest) {
         List<Notice> noticeList = noticeService.getNoticePage(pageRequest);
@@ -43,7 +40,7 @@ public class NoticeController {
      * 添加公告
      * @return
      */
-    @ApiOperation(value = "添加公告")
+    @Operation(summary = "添加公告")
     @PostMapping("/create")
     public JsonResult<Object> categoryCreate(@RequestBody  Notice notice) {
         int isStatus = noticeService.saveNotice(notice);
@@ -57,7 +54,7 @@ public class NoticeController {
      * 修改公告
      * @return
      */
-    @ApiOperation(value = "修改公告")
+    @Operation(summary = "修改公告")
     @PostMapping("/update")
     public JsonResult<Object> categoryUpdate(@RequestBody  Notice notice) {
         int isStatus = noticeService.updateNotice(notice);
@@ -71,7 +68,7 @@ public class NoticeController {
      * 删除
      * @return
      */
-    @ApiOperation(value = "删除公告")
+    @Operation(summary = "删除公告")
     @PostMapping("/delete/{id}")
     public JsonResult<Object> categoryDelete(@PathVariable(value = "id") int id) {
         noticeService.deleteNotice(id);

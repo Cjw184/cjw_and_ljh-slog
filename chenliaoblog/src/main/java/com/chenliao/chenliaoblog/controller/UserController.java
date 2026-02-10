@@ -5,8 +5,8 @@ import com.chenliao.chenliaoblog.entity.User;
 import com.chenliao.chenliaoblog.service.UserService;
 import com.chenliao.chenliaoblog.utils.JsonResult;
 import com.chenliao.chenliaoblog.utils.PhoneUtils;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Api(tags = "用户管理")
+@Tag(name = "用户管理")
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -27,7 +27,7 @@ public class UserController {
      * 用户列表
      * @return
      */
-    @ApiOperation(value = "用户列表")
+    @Operation(summary = "用户列表")
     @PostMapping("/list")
     public JsonResult<Object> list() {
         List<User> userList = userService.findAll();
@@ -38,7 +38,7 @@ public class UserController {
      * 添加用户
      * @return
      */
-    @ApiOperation(value = "添加用户")
+    @Operation(summary = "添加用户")
     @PostMapping("/create")
     public JsonResult<Object> userCreate(@RequestBody User user) {
         if (StrUtil.isEmpty(user.getPassWord())) {
@@ -72,7 +72,7 @@ public class UserController {
      * 修改用户
      * @return
      */
-    @ApiOperation(value = "修改用户")
+    @Operation(summary = "修改用户")
     @PostMapping("/update")
     public JsonResult<Object> userUpdate(@RequestBody User user) {
         if (StrUtil.isEmpty(user.getPassWord())) {
@@ -89,7 +89,7 @@ public class UserController {
      * 删除
      * @return
      */
-    @ApiOperation(value = "删除用户")
+    @Operation(summary = "删除用户")
     @PostMapping("/delete/{id}")
     public JsonResult<Object> userDelete(@PathVariable(value = "id") int id) {
         userService.deleteUser(id);
