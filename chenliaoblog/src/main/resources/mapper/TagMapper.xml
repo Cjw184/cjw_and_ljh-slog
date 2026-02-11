@@ -50,4 +50,8 @@
         SELECT * FROM person_tag WHERE tag_name = #{tagName}
     </select>
 
+    <select id="getTagById" resultType="com.chenliao.chenliaoblog.entity.Tag">
+        SELECT * FROM person_tag where id = #{id}
+    </select>
+
 </mapper>

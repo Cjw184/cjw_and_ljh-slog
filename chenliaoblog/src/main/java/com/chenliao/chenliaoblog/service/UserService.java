@@ -32,4 +32,11 @@ public interface UserService {
      */
     void deleteUser(int id);
 
+    /**
+     * 根据用户id查找用户
+     * @param userId
+     * @return
+     */
+    User findByUserId(Integer userId);
+
 }

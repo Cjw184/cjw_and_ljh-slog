@@ -33,5 +33,11 @@ public interface UserMapper {
      * @return
      */
     int delete(@Param("id")int id);
+    /**
+     * 根据用户id查找
+     * @param userId
+     * @return
+     */
+    User getUserById(Integer userId);
 
 }

@@ -87,4 +87,9 @@ public class Article {
      */
     private String categoryName;
 
+    /**
+     * 文章标签添加或更新时使用
+     */
+    private List<Integer> tagIdList;
+
 }

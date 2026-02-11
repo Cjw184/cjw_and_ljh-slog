@@ -53,4 +53,6 @@ public interface TagMapper {
      */
     Tag getByTagName(Tag tag);
 
+    Tag getTagById(Integer id);
+
 }
