@@ -3,23 +3,29 @@ package com.chenliao.chenliaoblog.controller;
 import com.chenliao.chenliaoblog.config.page.PageRequest;
 import com.chenliao.chenliaoblog.config.page.PageResult;
 import com.chenliao.chenliaoblog.entity.Article;
+import com.chenliao.chenliaoblog.entity.User;
 import com.chenliao.chenliaoblog.entity.dto.ArticleDTO;
 import com.chenliao.chenliaoblog.service.ArticleService;
+import com.chenliao.chenliaoblog.service.UserService;
 import com.chenliao.chenliaoblog.utils.JsonResult;
 import com.chenliao.chenliaoblog.utils.PageUtil;
 import com.github.pagehelper.PageInfo;
 import io.swagger.v3.oas.annotations.Operation;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping("/article")
 public class ArticleController {
     @Autowired
     ArticleService articleService;
+    @Autowired
+    UserService userService;
 
     /**
      * 文章列表
@@ -45,6 +51,22 @@ public class ArticleController {
     @Operation(summary = "添加文章")
     @PostMapping("/create")
     public JsonResult<Object> articleCreate(@RequestBody  Article article) {
+        // 1. 校验用户ID是否为空
+        if (article.getUserId() == null) {
+            String errorMsg = "添加文章失败：用户ID不能为空，请先选择发布用户";
+            log.warn(errorMsg);
+            // 返回错误的JsonResult，符合你的统一响应格式
+            return JsonResult.error(errorMsg);
+        }
+
+        // 2. 校验用户ID对应的用户是否存在
+        User existUser = userService.findByUserId(article.getUserId());
+        if (existUser == null) {
+            String errorMsg = "添加文章失败：用户ID=" + article.getUserId() + "不存在，请先创建该用户";
+            log.error(errorMsg);
+            return JsonResult.error(errorMsg);
+        }
+        // 添加文章
         articleService.saveArticle(article);
         return JsonResult.success();
     }
