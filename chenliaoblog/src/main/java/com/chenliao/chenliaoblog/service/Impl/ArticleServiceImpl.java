@@ -16,12 +16,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.pagehelper.PageHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executor;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -38,6 +40,11 @@ public class ArticleServiceImpl implements ArticleService {
     private StringRedisTemplate stringRedisTemplate;
     @Autowired
     private TagMapper tagMapper;
+
+    // 注入邮件发送专用线程池
+    @Autowired
+    @Qualifier("mailExecutor")
+    private Executor mailExecutor;
 
     // Jackson对象转换器（确保List<Tag>能正常序列化/反序列化）
     private final ObjectMapper objectMapper = new ObjectMapper();
@@ -145,6 +152,15 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public void saveArticle(Article article) {
+        // ===== 新增：前置校验用户ID有效性，避免空指针 =====
+        if (article.getUserId() == null) {
+            throw new IllegalArgumentException("用户ID不能为空，无法发布文章");
+        }
+        User existUser = userMapper.getUserById(article.getUserId());
+        if (existUser == null) {
+            throw new IllegalArgumentException("用户ID=" + article.getUserId() + "不存在，请先创建用户");
+        }
+
         // 1. 保存文章到数据库
         articleMapper.createArticle(article);
 
@@ -172,21 +188,21 @@ public class ArticleServiceImpl implements ArticleService {
             log.error("文章{}缓存新增失败", article.getId(), e);
         }
 
-        // 5. 发送邮件提醒
-        User user = userMapper.getUserById(article.getUserId());
-        String content = "【{0}】您好：\n" +
-                "您已成功发布了标题为: {1} 的文章 \n" +
-                "请注意查收！\n";
-        MailInfo build = MailInfo.builder()
-                .receiveMail(user.getEmail())
-                .content(MessageFormat.format(content, user.getUserName(), article.getTitle()))
-                .title("文章发布")
-                .build();
-        SendMailConfig.sendMail(build);
+        // 5. 异步发送邮件提醒（替换原有同步逻辑）
+        sendMailAsync(existUser, article, "文章发布");
     }
 
     @Override
     public void updateArticle(Article article) {
+        // ===== 新增：前置校验用户ID有效性，避免空指针 =====
+        if (article.getUserId() == null) {
+            throw new IllegalArgumentException("用户ID不能为空，无法更新文章");
+        }
+        User existUser = userMapper.getUserById(article.getUserId());
+        if (existUser == null) {
+            throw new IllegalArgumentException("用户ID=" + article.getUserId() + "不存在");
+        }
+
         // 1. 更新文章到数据库
         articleMapper.updateArticle(article);
 
@@ -215,17 +231,8 @@ public class ArticleServiceImpl implements ArticleService {
             log.error("文章{}缓存更新失败", article.getId(), e);
         }
 
-        // 5. 发送邮件提醒
-        User user = userMapper.getUserById(article.getUserId());
-        String content = "【{0}】您好：\n" +
-                "您已成功更新了标题为: {1} 的文章 \n" +
-                "请注意查收！\n";
-        MailInfo build = MailInfo.builder()
-                .receiveMail(user.getEmail())
-                .content(MessageFormat.format(content, user.getUserName(), article.getTitle()))
-                .title("文章更新")
-                .build();
-        SendMailConfig.sendMail(build);
+        // 5. 异步发送邮件提醒（替换原有同步逻辑）
+        sendMailAsync(existUser, article, "文章更新");
     }
 
     @Override
@@ -280,5 +287,57 @@ public class ArticleServiceImpl implements ArticleService {
             }
         }
         return article;
+    }
+
+    /**
+     * 私有方法：异步发送邮件（核心新增逻辑）
+     * @param user 收件用户（已校验非空）
+     * @param article 文章信息
+     * @param mailTitle 邮件标题（文章发布/更新）
+     */
+    private void sendMailAsync(User user, Article article, String mailTitle) {
+        // 1. 校验用户邮箱是否有效
+        boolean sendSuccess = false;
+        if (user.getEmail() == null || user.getEmail().trim().isEmpty()) {
+            log.warn("用户{}（ID={}）未配置邮箱，跳过异步邮件发送", user.getUserName(), user.getId());
+            return;
+        }
+
+        // 2. 提交异步任务到线程池
+        mailExecutor.execute(() -> {
+            try {
+                String userName = user.getUserName() == null ? "用户" : user.getUserName();
+                // 构建邮件内容
+                String content = MessageFormat.format(
+                        "【{0}】您好：\n您已成功{1}了标题为: {2} 的文章 \n请注意查收！\n",
+                        userName,
+                        "文章发布".equals(mailTitle) ? "发布" : "更新",
+                        article.getTitle()
+                );
+
+                // 构建邮件信息
+                MailInfo mailInfo = MailInfo.builder()
+                        .receiveMail(user.getEmail().trim())
+                        .content(content)
+                        .title(mailTitle)
+                        .build();
+
+                // 调用邮件发送工具类（这里抛异常会被catch捕获）
+                SendMailConfig.sendMail(mailInfo);
+
+                // ===== 关键修复：仅在发送成功后打印成功日志 =====
+                //Thread.sleep(1000);
+                log.info("异步邮件发送成功！收件人：{}，标题：{}，文章ID：{}",
+                        user.getEmail(), mailTitle, article.getId());
+            } catch (Exception e) {
+                // 区分认证失败、连接失败等不同异常，精准提示
+                String errorType = e instanceof cn.hutool.extra.mail.MailException && e.getCause() instanceof javax.mail.AuthenticationFailedException
+                        ? "SMTP认证失败（大概率是163授权码错误）" : "邮件发送异常";
+
+                // 打印详细失败日志，包含异常类型
+                log.error("异步邮件发送失败！{}，用户ID：{}，文章ID：{}，标题：{}，异常信息：{}",
+                        errorType, user.getId(), article.getId(), mailTitle, e.getMessage(), e);
+            }
+        });
     }
 }
