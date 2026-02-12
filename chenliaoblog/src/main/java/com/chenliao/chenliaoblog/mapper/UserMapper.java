@@ -40,4 +40,6 @@ public interface UserMapper {
      */
     User getUserById(Integer userId);
 
+    User getByUsername(String username);
+
 }

@@ -1,4 +1,4 @@
-package com.chenliao.chenliaoblog.controller;
+package com.chenliao.chenliaoblog.controller.visitor;
 
 import com.chenliao.chenliaoblog.config.page.PageRequest;
 import com.chenliao.chenliaoblog.config.page.PageResult;
@@ -10,13 +10,12 @@ import com.github.pagehelper.PageInfo;
 import io.swagger.v3.oas.annotations.Operation;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @io.swagger.v3.oas.annotations.tags.Tag(name = "标签管理")
-@RestController
+@RestController("visitorTagController")
 @RequestMapping("/tag")
 public class TagController {
     @Autowired

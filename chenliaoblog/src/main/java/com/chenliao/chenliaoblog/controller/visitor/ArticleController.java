@@ -1,9 +1,8 @@
-package com.chenliao.chenliaoblog.controller;
+package com.chenliao.chenliaoblog.controller.visitor;
 
 import com.chenliao.chenliaoblog.config.page.PageRequest;
 import com.chenliao.chenliaoblog.config.page.PageResult;
 import com.chenliao.chenliaoblog.entity.Article;
-import com.chenliao.chenliaoblog.entity.User;
 import com.chenliao.chenliaoblog.entity.dto.ArticleDTO;
 import com.chenliao.chenliaoblog.service.ArticleService;
 import com.chenliao.chenliaoblog.service.UserService;
@@ -13,13 +12,12 @@ import com.github.pagehelper.PageInfo;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @Slf4j
-@RestController
+@RestController("visitorArticleController")
 @RequestMapping("/article")
 public class ArticleController {
     @Autowired

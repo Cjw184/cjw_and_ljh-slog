@@ -55,5 +55,8 @@ public class User {
      */
     private LocalDateTime updateTime;
 
+    //jwt令牌
+    private String token;
+
 
 }

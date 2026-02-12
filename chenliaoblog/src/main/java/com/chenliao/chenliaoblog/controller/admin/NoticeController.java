@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Tag(name = "公告管理")
-@RestController
+@RestController("adminNoticeController")
 @RequestMapping("/admin/notice")
 public class NoticeController {
     @Autowired

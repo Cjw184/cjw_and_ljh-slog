@@ -58,4 +58,8 @@
         select * from person_user where id = #{userId, jdbcType=INTEGER}
     </select>
 
+    <select id="getByUsername" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select * from person_user where username = #{username, jdbcType=VARCHAR}
+    </select>
+
 </mapper>

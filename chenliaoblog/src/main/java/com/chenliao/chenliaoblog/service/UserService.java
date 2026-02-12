@@ -39,4 +39,7 @@ public interface UserService {
      */
     User findByUserId(Integer userId);
 
+    User login(User user);
+
+
 }

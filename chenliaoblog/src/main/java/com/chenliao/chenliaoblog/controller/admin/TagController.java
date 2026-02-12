@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @io.swagger.v3.oas.annotations.tags.Tag(name = "标签管理")
-@RestController
+@RestController("adminTagController")
 @RequestMapping("/admin/tag")
 public class TagController {
     @Autowired

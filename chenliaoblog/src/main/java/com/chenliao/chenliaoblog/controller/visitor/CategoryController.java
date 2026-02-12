@@ -1,4 +1,4 @@
-package com.chenliao.chenliaoblog.controller;
+package com.chenliao.chenliaoblog.controller.visitor;
 
 
 import com.chenliao.chenliaoblog.config.page.PageRequest;
@@ -8,16 +8,14 @@ import com.chenliao.chenliaoblog.service.CategoryService;
 import com.chenliao.chenliaoblog.utils.JsonResult;
 import com.chenliao.chenliaoblog.utils.PageUtil;
 import com.github.pagehelper.PageInfo;
-import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @Tag(name = "分类管理")
-@RestController
+@RestController("visitorCategoryController")
 @RequestMapping("/category")
 public class CategoryController {
     @Autowired

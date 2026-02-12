@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Slf4j
-@RestController
+@RestController("adminArticleController")
 @RequestMapping("/admin/article")
 public class ArticleController {
     @Autowired
