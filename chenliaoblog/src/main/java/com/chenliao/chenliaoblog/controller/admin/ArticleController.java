@@ -1,4 +1,4 @@
-package com.chenliao.chenliaoblog.controller;
+package com.chenliao.chenliaoblog.controller.admin;
 
 import com.chenliao.chenliaoblog.config.page.PageRequest;
 import com.chenliao.chenliaoblog.config.page.PageResult;
@@ -13,14 +13,13 @@ import com.github.pagehelper.PageInfo;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping("/article")
+@RequestMapping("/admin/article")
 public class ArticleController {
     @Autowired
     ArticleService articleService;
@@ -48,50 +47,50 @@ public class ArticleController {
      * 添加文章
      * @return
      */
-//    @Operation(summary = "添加文章")
-//    @PostMapping("/create")
-//    public JsonResult<Object> articleCreate(@RequestBody  Article article) {
-//        // 1. 校验用户ID是否为空
-//        if (article.getUserId() == null) {
-//            String errorMsg = "添加文章失败：用户ID不能为空，请先选择发布用户";
-//            log.warn(errorMsg);
-//            // 返回错误的JsonResult，符合你的统一响应格式
-//            return JsonResult.error(errorMsg);
-//        }
-//
-//        // 2. 校验用户ID对应的用户是否存在
-//        User existUser = userService.findByUserId(article.getUserId());
-//        if (existUser == null) {
-//            String errorMsg = "添加文章失败：用户ID=" + article.getUserId() + "不存在，请先创建该用户";
-//            log.error(errorMsg);
-//            return JsonResult.error(errorMsg);
-//        }
-//        // 添加文章
-//        articleService.saveArticle(article);
-//        return JsonResult.success();
-//    }
+    @Operation(summary = "添加文章")
+    @PostMapping("/create")
+    public JsonResult<Object> articleCreate(@RequestBody  Article article) {
+        // 1. 校验用户ID是否为空
+        if (article.getUserId() == null) {
+            String errorMsg = "添加文章失败：用户ID不能为空，请先选择发布用户";
+            log.warn(errorMsg);
+            // 返回错误的JsonResult，符合你的统一响应格式
+            return JsonResult.error(errorMsg);
+        }
 
-//    /**
-//     * 修改文章
-//     * @return
-//     */
-//    @Operation(summary = "修改文章")
-//    @PostMapping("/update")
-//    public JsonResult<Object> articleUpdate(@RequestBody  Article article) {
-//        articleService.updateArticle(article);
-//        return JsonResult.success();
-//    }
+        // 2. 校验用户ID对应的用户是否存在
+        User existUser = userService.findByUserId(article.getUserId());
+        if (existUser == null) {
+            String errorMsg = "添加文章失败：用户ID=" + article.getUserId() + "不存在，请先创建该用户";
+            log.error(errorMsg);
+            return JsonResult.error(errorMsg);
+        }
+        // 添加文章
+        articleService.saveArticle(article);
+        return JsonResult.success();
+    }
 
-//    /**
-//     * 删除文章
-//     * @return
-//     */
-//    @Operation(summary = "删除文章")
-//    @DeleteMapping("/delete/{id}")
-//    public JsonResult<Object> articleDelete(@PathVariable(value = "id") int id) {
-//        articleService.deleteArticle(id);
-//        return JsonResult.success();
-//    }
+    /**
+     * 修改文章
+     * @return
+     */
+    @Operation(summary = "修改文章")
+    @PostMapping("/update")
+    public JsonResult<Object> articleUpdate(@RequestBody  Article article) {
+        articleService.updateArticle(article);
+        return JsonResult.success();
+    }
+
+    /**
+     * 删除文章
+     * @return
+     */
+    @Operation(summary = "删除文章")
+    @DeleteMapping("/delete/{id}")
+    public JsonResult<Object> articleDelete(@PathVariable(value = "id") int id) {
+        articleService.deleteArticle(id);
+        return JsonResult.success();
+    }
 
     /**
      * 根据文章id查找

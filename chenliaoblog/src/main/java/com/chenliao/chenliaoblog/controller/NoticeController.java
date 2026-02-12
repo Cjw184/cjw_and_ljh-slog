@@ -36,43 +36,43 @@ public class NoticeController {
         return JsonResult.success(pageResult);
     }
 
-    /**
-     * 添加公告
-     * @return
-     */
-    @Operation(summary = "添加公告")
-    @PostMapping("/create")
-    public JsonResult<Object> categoryCreate(@RequestBody  Notice notice) {
-        int isStatus = noticeService.saveNotice(notice);
-        if (isStatus == 0) {
-            return JsonResult.error("添加公告失败");
-        }
-        return JsonResult.success();
-    }
-
-    /**
-     * 修改公告
-     * @return
-     */
-    @Operation(summary = "修改公告")
-    @PostMapping("/update")
-    public JsonResult<Object> categoryUpdate(@RequestBody  Notice notice) {
-        int isStatus = noticeService.updateNotice(notice);
-        if (isStatus == 0) {
-            return JsonResult.error("修改公告失败");
-        }
-        return JsonResult.success();
-    }
-
-    /**
-     * 删除
-     * @return
-     */
-    @Operation(summary = "删除公告")
-    @PostMapping("/delete/{id}")
-    public JsonResult<Object> categoryDelete(@PathVariable(value = "id") int id) {
-        noticeService.deleteNotice(id);
-        return JsonResult.success();
-    }
+//    /**
+//     * 添加公告
+//     * @return
+//     */
+//    @Operation(summary = "添加公告")
+//    @PostMapping("/create")
+//    public JsonResult<Object> categoryCreate(@RequestBody  Notice notice) {
+//        int isStatus = noticeService.saveNotice(notice);
+//        if (isStatus == 0) {
+//            return JsonResult.error("添加公告失败");
+//        }
+//        return JsonResult.success();
+//    }
+//
+//    /**
+//     * 修改公告
+//     * @return
+//     */
+//    @Operation(summary = "修改公告")
+//    @PostMapping("/update")
+//    public JsonResult<Object> categoryUpdate(@RequestBody  Notice notice) {
+//        int isStatus = noticeService.updateNotice(notice);
+//        if (isStatus == 0) {
+//            return JsonResult.error("修改公告失败");
+//        }
+//        return JsonResult.success();
+//    }
+//
+//    /**
+//     * 删除
+//     * @return
+//     */
+//    @Operation(summary = "删除公告")
+//    @PostMapping("/delete/{id}")
+//    public JsonResult<Object> categoryDelete(@PathVariable(value = "id") int id) {
+//        noticeService.deleteNotice(id);
+//        return JsonResult.success();
+//    }
 
 }

@@ -1,4 +1,4 @@
-package com.chenliao.chenliaoblog.controller;
+package com.chenliao.chenliaoblog.controller.admin;
 
 import cn.hutool.core.util.StrUtil;
 import com.chenliao.chenliaoblog.entity.User;
@@ -16,7 +16,7 @@ import java.util.List;
 
 @Tag(name = "用户管理")
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/admin/user")
 public class UserController {
     @Autowired
     UserService userService;
