@@ -16,7 +16,7 @@ import java.util.List;
 
 @Tag(name = "公告管理")
 @RestController("visitorNoticeController")
-@RequestMapping("/notice")
+@RequestMapping("/visitor/notice")
 public class NoticeController {
     @Autowired
     NoticeService noticeService;

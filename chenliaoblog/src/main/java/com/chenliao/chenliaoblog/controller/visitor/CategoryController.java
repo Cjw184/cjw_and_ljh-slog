@@ -16,7 +16,7 @@ import java.util.List;
 
 @Tag(name = "分类管理")
 @RestController("visitorCategoryController")
-@RequestMapping("/category")
+@RequestMapping("/visitor/category")
 public class CategoryController {
     @Autowired
     CategoryService categoryService;

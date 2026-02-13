@@ -18,7 +18,7 @@ import java.util.List;
 
 @Slf4j
 @RestController("visitorArticleController")
-@RequestMapping("/article")
+@RequestMapping("/visitor/article")
 public class ArticleController {
     @Autowired
     ArticleService articleService;
