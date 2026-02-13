@@ -1,6 +1,8 @@
 package com.chenliao.chenliaoblog.controller.admin;
 
 import cn.hutool.core.util.StrUtil;
+import com.chenliao.chenliaoblog.annotation.OperationLog;
+import com.chenliao.chenliaoblog.annotation.OperationType;
 import com.chenliao.chenliaoblog.entity.User;
 import com.chenliao.chenliaoblog.service.UserService;
 import com.chenliao.chenliaoblog.utils.JsonResult;
@@ -29,6 +31,7 @@ public class UserController {
      */
     @Operation(summary = "用户列表")
     @PostMapping("/list")
+    @OperationLog(desc = "获取用户列表", operationType = OperationType.SELECT)
     public JsonResult<Object> list() {
         List<User> userList = userService.findAll();
         return JsonResult.success(userList);
@@ -40,6 +43,7 @@ public class UserController {
      */
     @Operation(summary = "添加用户")
     @PostMapping("/create")
+    @OperationLog(desc = "添加用户", operationType = OperationType.INSERT)
     public JsonResult<Object> userCreate(@RequestBody User user) {
         if (StrUtil.isEmpty(user.getPassWord())) {
             return JsonResult.error("密码为空，请填写密码！");
@@ -74,6 +78,7 @@ public class UserController {
      */
     @Operation(summary = "修改用户")
     @PostMapping("/update")
+    @OperationLog(desc = "修改用户", operationType = OperationType.UPDATE)
     public JsonResult<Object> userUpdate(@RequestBody User user) {
         if (StrUtil.isEmpty(user.getPassWord())) {
             return JsonResult.error("密码为空，请填写密码！");
@@ -91,6 +96,7 @@ public class UserController {
      */
     @Operation(summary = "删除用户")
     @PostMapping("/delete/{id}")
+    @OperationLog(desc = "删除用户", operationType = OperationType.DELETE)
     public JsonResult<Object> userDelete(@PathVariable(value = "id") int id) {
         userService.deleteUser(id);
         return JsonResult.success();

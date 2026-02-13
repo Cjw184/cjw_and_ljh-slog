@@ -1,5 +1,7 @@
 package com.chenliao.chenliaoblog.controller.admin;
 
+import com.chenliao.chenliaoblog.annotation.OperationLog;
+import com.chenliao.chenliaoblog.annotation.OperationType;
 import com.chenliao.chenliaoblog.config.page.PageRequest;
 import com.chenliao.chenliaoblog.config.page.PageResult;
 import com.chenliao.chenliaoblog.entity.Article;
@@ -33,6 +35,7 @@ public class ArticleController {
      */
     @Operation(summary = "文章列表")
     @PostMapping("list")
+    @OperationLog(desc = "获取文章列表", operationType = OperationType.SELECT)
     public JsonResult<Object> listPage(@RequestBody ArticleDTO articleDTO) {
         List<Article> articleList = articleService.getArticlePage(articleDTO);
         PageInfo pageInfo = new PageInfo(articleList);
@@ -49,6 +52,7 @@ public class ArticleController {
      */
     @Operation(summary = "添加文章")
     @PostMapping("/create")
+    @OperationLog(desc = "添加文章", operationType = OperationType.INSERT)
     public JsonResult<Object> articleCreate(@RequestBody  Article article) {
         // 1. 校验用户ID是否为空
         if (article.getUserId() == null) {
@@ -76,6 +80,7 @@ public class ArticleController {
      */
     @Operation(summary = "修改文章")
     @PostMapping("/update")
+    @OperationLog(desc = "修改文章", operationType = OperationType.UPDATE)
     public JsonResult<Object> articleUpdate(@RequestBody  Article article) {
         articleService.updateArticle(article);
         return JsonResult.success();
@@ -87,6 +92,7 @@ public class ArticleController {
      */
     @Operation(summary = "删除文章")
     @DeleteMapping("/delete/{id}")
+    @OperationLog(desc = "删除文章", operationType = OperationType.DELETE)
     public JsonResult<Object> articleDelete(@PathVariable(value = "id") int id) {
         articleService.deleteArticle(id);
         return JsonResult.success();
@@ -99,6 +105,7 @@ public class ArticleController {
      */
     @Operation(summary = "根据文章id查找")
     @PostMapping("/getArticle/{id}")
+    @OperationLog(desc = "根据文章id查找", operationType = OperationType.SELECT)
     public JsonResult<Object> getArticleById(@PathVariable(value = "id") int id) {
         Article article = articleService.findById(id);
         return JsonResult.success(article);

@@ -1,5 +1,7 @@
 package com.chenliao.chenliaoblog.controller.admin;
 
+import com.chenliao.chenliaoblog.annotation.OperationLog;
+import com.chenliao.chenliaoblog.annotation.OperationType;
 import com.chenliao.chenliaoblog.config.page.PageRequest;
 import com.chenliao.chenliaoblog.config.page.PageResult;
 import com.chenliao.chenliaoblog.entity.Tag;
@@ -27,6 +29,7 @@ public class TagController {
      */
     @Operation(summary = "标签列表")
     @PostMapping("list")
+    @OperationLog(desc = "分页查询标签列表", operationType = OperationType.SELECT)
     public JsonResult<Object> listPage(@RequestBody PageRequest pageRequest) {
         List<Tag> tagList = tagService.getTagPage(pageRequest);
         PageInfo pageInfo = new PageInfo(tagList);
@@ -40,6 +43,7 @@ public class TagController {
      */
     @Operation(summary = "添加标签")
     @PostMapping("/create")
+    @OperationLog(desc = "添加标签", operationType = OperationType.INSERT)
     public JsonResult<Object> tagCreate(@RequestBody Tag tag) {
         int isStatus = tagService.saveTag(tag);
         if (isStatus == 0) {
@@ -56,6 +60,7 @@ public class TagController {
      */
     @Operation(summary = "批量添加标签")
     @PostMapping("/batchCreate")
+    @OperationLog(desc = "批量添加标签", operationType = OperationType.INSERT)
     public JsonResult<Object> batchCreate(@RequestBody Tag tags) {
         try {
             boolean isStatus = tagService.batchAddTag(tags.getTagName());
@@ -75,6 +80,7 @@ public class TagController {
      */
     @Operation(summary = "批量删除标签")
     @DeleteMapping("/batchDelete")
+    @OperationLog(desc = "批量删除标签", operationType = OperationType.DELETE)
     public JsonResult<Object> batchDelete(@RequestBody String ids) {
         boolean isDelTag = tagService.batchDelTag(ids);
         if (!isDelTag) {
@@ -89,6 +95,7 @@ public class TagController {
      */
     @Operation(summary = "修改标签")
     @PutMapping("/update")
+    @OperationLog(desc = "修改标签", operationType = OperationType.UPDATE)
     public JsonResult<Object> tagUpdate(@RequestBody Tag tag) {
         int isStatus = tagService.updateTag(tag);
         if (isStatus == 0) {
@@ -103,6 +110,7 @@ public class TagController {
      */
     @Operation(summary = "删除标签")
     @DeleteMapping("/delete/{id}")
+    @OperationLog(desc = "删除标签", operationType = OperationType.DELETE)
     public JsonResult<Object> tagDelete(@PathVariable(value = "id") int id) {
         tagService.deleteTag(id);
         return JsonResult.success();

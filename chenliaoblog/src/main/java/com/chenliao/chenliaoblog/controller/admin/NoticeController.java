@@ -1,5 +1,7 @@
 package com.chenliao.chenliaoblog.controller.admin;
 
+import com.chenliao.chenliaoblog.annotation.OperationLog;
+import com.chenliao.chenliaoblog.annotation.OperationType;
 import com.chenliao.chenliaoblog.config.page.PageRequest;
 import com.chenliao.chenliaoblog.config.page.PageResult;
 import com.chenliao.chenliaoblog.entity.Notice;
@@ -28,6 +30,7 @@ public class NoticeController {
      */
     @Operation(summary = "公告列表")
     @PostMapping("/list")
+    @OperationLog(desc = "公告列表", operationType = OperationType.SELECT)
     public JsonResult<Object> listPage(@RequestBody  PageRequest pageRequest) {
         List<Notice> noticeList = noticeService.getNoticePage(pageRequest);
         PageInfo pageInfo = new PageInfo(noticeList);
@@ -41,6 +44,7 @@ public class NoticeController {
      */
     @Operation(summary = "添加公告")
     @PostMapping("/create")
+    @OperationLog(desc = "添加公告", operationType = OperationType.INSERT)
     public JsonResult<Object> categoryCreate(@RequestBody  Notice notice) {
         int isStatus = noticeService.saveNotice(notice);
         if (isStatus == 0) {
@@ -55,6 +59,7 @@ public class NoticeController {
      */
     @Operation(summary = "修改公告")
     @PostMapping("/update")
+    @OperationLog(desc = "修改公告", operationType = OperationType.UPDATE)
     public JsonResult<Object> categoryUpdate(@RequestBody  Notice notice) {
         int isStatus = noticeService.updateNotice(notice);
         if (isStatus == 0) {
@@ -69,6 +74,7 @@ public class NoticeController {
      */
     @Operation(summary = "删除公告")
     @PostMapping("/delete/{id}")
+    @OperationLog(desc = "删除公告", operationType = OperationType.DELETE)
     public JsonResult<Object> categoryDelete(@PathVariable(value = "id") int id) {
         noticeService.deleteNotice(id);
         return JsonResult.success();

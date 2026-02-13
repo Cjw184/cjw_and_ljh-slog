@@ -1,5 +1,7 @@
 package com.chenliao.chenliaoblog.controller.admin;
 
+import com.chenliao.chenliaoblog.annotation.OperationLog;
+import com.chenliao.chenliaoblog.annotation.OperationType;
 import com.chenliao.chenliaoblog.entity.User;
 import com.chenliao.chenliaoblog.service.UserService;
 import com.chenliao.chenliaoblog.utils.JsonResult;
@@ -21,6 +23,7 @@ public class Login {
     private UserService userService;
 
     @PostMapping("/login")
+    @OperationLog(desc = "用户登录", operationType = OperationType.SELECT)
     public JsonResult<User> login(@RequestBody User user) {
         log.info("登录：{}", user);
 

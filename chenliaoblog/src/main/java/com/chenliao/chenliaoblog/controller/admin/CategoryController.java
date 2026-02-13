@@ -1,6 +1,8 @@
 package com.chenliao.chenliaoblog.controller.admin;
 
 
+import com.chenliao.chenliaoblog.annotation.OperationLog;
+import com.chenliao.chenliaoblog.annotation.OperationType;
 import com.chenliao.chenliaoblog.config.page.PageRequest;
 import com.chenliao.chenliaoblog.config.page.PageResult;
 import com.chenliao.chenliaoblog.entity.Category;
@@ -28,6 +30,7 @@ public class CategoryController {
      * @return
      */
     @PostMapping("list")
+    @OperationLog(desc = "分页查询分类", operationType = OperationType.SELECT)
     public JsonResult<Object> listPage(@RequestBody  PageRequest pageRequest) {
         List<Category> categoryList = categoryService.getCategoryPage(pageRequest);
         PageInfo pageInfo = new PageInfo(categoryList);
@@ -41,6 +44,7 @@ public class CategoryController {
      */
     @Operation(summary = "添加分类")
     @PostMapping("/create")
+    @OperationLog(desc = "添加分类", operationType = OperationType.INSERT)
     public JsonResult<Object> categoryCreate(@RequestBody  Category category) {
         int isStatus = categoryService.saveCategory(category);
         if (isStatus == 0) {
@@ -55,6 +59,7 @@ public class CategoryController {
      */
     @Operation(summary = "修改分类")
     @PostMapping("/update")
+    @OperationLog(desc = "修改分类", operationType = OperationType.UPDATE)
     public JsonResult<Object> categoryUpdate(@RequestBody  Category category) {
         int isStatus = categoryService.updateCategory(category);
         if (isStatus == 0) {
@@ -69,6 +74,7 @@ public class CategoryController {
      */
     @Operation(summary = "删除分类")
     @PostMapping("/delete/{id}")
+    @OperationLog(desc = "删除分类", operationType = OperationType.DELETE)
     public JsonResult<Object> categoryDelete(@PathVariable(value = "id") int id) {
         categoryService.deleteCategory(id);
         return JsonResult.success();
